@@ -1,0 +1,65 @@
+{% extends "main/base.html" %}
+
+{% block title %}Home Page{% endblock title %}
+
+{% block content %}
+
+
+    <h1>Welcome back!</h1>
+
+{% for posts in posts %}
+    <div class='card mt-2'>
+        <div class='card-header'><strong>@{{ posts.author.username }}</strong></div>
+        <div>
+            <div class='class-body d-flex flex-row justify-content-between container mt-4'>
+                <div class='container'>
+                    <h5 class='card-title'>{{ posts.title }}</h5>
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" alt="{{ post.title }}" style="max-width: 100%; height: auto;">
+                    {% else %}
+                        <p>No image available for this post.</p>
+                    {% endif %}                 
+                    <p>{{ posts.description }}</p>       
+                </div>
+                <div class=' d-flex flex-row gap-4 justify-content-right'>
+                    {% if user == posts.author or perms.main.delete_post %}
+                            {% comment %} <a href="{% url 'edit_post' posts.id %}">Edit</a> |  {% endcomment %}
+                        <form  method='POST'>
+                            {% csrf_token %}
+                            <button type='submit' class='btn btn-danger' name = 'post-id' value = '{{posts.id}}'>Delete</button>
+                        </form>
+                    {% endif %}
+                    {% if user.is_staff %}
+                        <form  method='POST'>
+                            {% csrf_token %}
+                            <button type='submit' class='btn btn-warning px-4' name = 'user-id' value = '{{posts.author.id}}'>Ban User</button>
+                        </form>    
+                    {% endif %}
+                </div> 
+            </div>
+        </div>
+        <div class='card-footer text-muted'>Posted on | {{posts.created_at}}</div>
+    </div>
+
+    {% empty %}
+    <p>
+        No posts yet. Be the first to share your thoughts!
+    </p>
+{% endfor %}
+<script>
+    window.onload = function() {
+        // Get the latest post ID from the Django template
+        const latestPostId = "{{ latest_post_id }}";
+        
+        // Check if the latest post ID is available
+        if (latestPostId) {
+            const latestPostElement = document.getElementById(`post-${latestPostId}`);
+            
+            if (latestPostElement) {
+                // Scroll the latest post into view
+                latestPostElement.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+    };
+</script>
+{% endblock content %}
