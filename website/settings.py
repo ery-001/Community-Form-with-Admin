@@ -149,7 +149,6 @@ LOGIN_REDIRECT_URL = '/home'
 LOGOUT_REDIRECT_URL = '/login/'
 
 # myproject/settings.py
-ALLOWED_HOSTS = [' vercel.app', 'localhost', '127.0.0.1']
 
 
 
