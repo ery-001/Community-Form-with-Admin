@@ -3,21 +3,14 @@
   "builds": [
     {
       "src": "manage.py",
-      "use": "@vercel/python"
+      "use": "@vercel/python",
+      "config": { "maxLambdaSize": "100mb" }
     }
   ],
   "routes": [
     {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
-    },
-    {
-      "src": "/media/(.*)",
-      "dest": "/media/$1"
+      "src": "/(.*)",
+      "dest": "/manage.py"
     }
-  ],
-  "env": {
-    "DATABASE_URL": "postgres://default:EtBmPUi5Ys3A@ep-still-wave-a4todl50-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require",
-    "SECRET_KEY": "EtBmPUi5Ys3A"
-  }
+  ]
 }
